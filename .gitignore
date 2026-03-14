@@ -17,3 +17,4 @@ __pycache__
 */wandb/*
 */checkpoints/*
 outputs/
+NanoFM_Homeworks/outputs
