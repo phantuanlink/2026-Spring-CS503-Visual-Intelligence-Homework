@@ -144,6 +144,7 @@ class CrossAttention(nn.Module):
         # Hint: Do you need to define two different projections, or can you use a single one for both?
         self.kv = nn.Linear(dim, dim * 2, bias=qkv_bias)
 
+        self.softmax = nn.Softmax(dim=-1)
         self.attn_out_proj = nn.Linear(dim, dim, bias=proj_bias)
 
     def forward(self, x: torch.Tensor, context: torch.Tensor, mask: Optional[torch.Tensor] = None) -> torch.Tensor:
@@ -168,7 +169,7 @@ class CrossAttention(nn.Module):
             attn = attn.masked_fill(~mask, float("-inf"))
 
         # TODO: Compute the softmax over the last dimension
-        attn = self.softmask(attn)
+        attn = self.softmax(attn)
 
         # TODO: Weight the values V by the attention matrix and concatenate the different attention heads
         # Make sure to reshape the output to the original shape of x, i.e. [B N D]
@@ -243,6 +244,7 @@ class DecoderBlock(nn.Module):
         x = x + self.self_attn(self.norm1(x), mask=sa_mask)
         x = x + self.cross_attn(self.query_norm(x), self.context_norm(context), mask=xa_mask)
         x = x + self.mlp(self.norm2(x))
+        return x
 
 
 class TransformerTrunk(nn.Module):
