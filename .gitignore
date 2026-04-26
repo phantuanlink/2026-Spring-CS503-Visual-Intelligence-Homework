@@ -18,3 +18,6 @@ __pycache__
 */checkpoints/*
 outputs/
 NanoFM_Homeworks/outputs
+.vscode/
+*.err
+*.out
